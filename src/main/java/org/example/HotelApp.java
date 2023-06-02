@@ -11,6 +11,7 @@ public class HotelApp {
         try (var conn = getDbConnection()) {
             var customerService = new CustomerService(conn);
             var apartmentService = new ApartmentService(conn);
+            var bookingService = new BookingService(conn);
 
             customerService.showCustomers();
             customerService.showCustomerBalance(1);
@@ -22,6 +23,8 @@ public class HotelApp {
             System.out.println("All free apartments");
             freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2024-06-14"), Date.valueOf("2024-06-15"));
             freeApartments.forEach(System.out::println);
+
+            bookingService.bookRoom(new Booking(0, Date.valueOf("2024-06-10"), Date.valueOf("2024-06-30"), 1, 1, 1));
 
         } catch (SQLException | ConfigurationException e) {
             e.printStackTrace();
