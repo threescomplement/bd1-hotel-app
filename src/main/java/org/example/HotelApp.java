@@ -6,6 +6,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.sql.*;
 
+import static org.example.Common.printSeparator;
+
 public class HotelApp {
     public static void main(String[] args) {
         try (var conn = getDbConnection()) {
@@ -24,7 +26,11 @@ public class HotelApp {
             freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2024-06-14"), Date.valueOf("2024-06-15"));
             freeApartments.forEach(System.out::println);
 
-            bookingService.bookRoom(new Booking(0, Date.valueOf("2024-06-10"), Date.valueOf("2024-06-30"), 1, 1, 1));
+            bookingService.bookRoom(new Booking(Date.valueOf("2024-06-10"), Date.valueOf("2024-06-30"), 1, 1, 1));
+
+            printSeparator();
+            System.out.println("Bookings for customer 1");
+            bookingService.getCustomerBookings(1).forEach(System.out::println);
 
         } catch (SQLException | ConfigurationException e) {
             e.printStackTrace();
