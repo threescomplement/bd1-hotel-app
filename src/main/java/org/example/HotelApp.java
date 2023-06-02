@@ -14,6 +14,7 @@ public class HotelApp {
             var customerService = new CustomerService(conn);
             var apartmentService = new ApartmentService(conn);
             var bookingService = new BookingService(conn);
+            var productService = new ProductService(conn);
 
             customerService.showCustomers();
             customerService.showCustomerBalance(1);
@@ -31,6 +32,13 @@ public class HotelApp {
             printSeparator();
             System.out.println("Bookings for customer 1");
             bookingService.getCustomerBookings(1).forEach(System.out::println);
+
+            productService.orderProduct(1, 1);
+
+            printSeparator();
+            System.out.println("All products");
+            productService.getAllProducts().forEach(System.out::println);
+
 
         } catch (SQLException | ConfigurationException e) {
             e.printStackTrace();
