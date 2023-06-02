@@ -7,28 +7,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApartmentService {
-    private final Connection connection;
     private static final String FREE_APARTMENTS_QUERY = """
-            SELECT * FROM apartments a
-            WHERE NOT EXISTS(
+            SELECT *
+            FROM apartments apt
+            JOIN HOTELS h on h.ID = apt.HOTEL_ID
+            JOIN ADDRESSES addr on addr.ID = h.ADDRESS_ID
+            JOIN CITIES c on c.ID = addr.CITY_ID
+            WHERE LOWER(c.name) LIKE ? AND NOT EXISTS(
                             SELECT b.id FROM bookings b
-                            WHERE b.APARTMENT_ID = a.ID
+                            WHERE b.APARTMENT_ID = apt.ID
                             AND (
                             (b.START_DATE >= ? AND  b.START_DATE <= ? )
                             OR (b.END_DATE >= ? AND b.END_DATE <= ?))
                             )
             """;
+    private final Connection connection;
 
     public ApartmentService(Connection connection) {
         this.connection = connection;
     }
 
-    public List<Apartment> getAvailableApartments(Date from, Date to) throws SQLException {
+    public List<Apartment> getAvailableApartments(Date from, Date to, String city) throws SQLException {
         var query = connection.prepareStatement(FREE_APARTMENTS_QUERY);
-        query.setDate(1, from);
-        query.setDate(2, to);
-        query.setDate(3, from);
-        query.setDate(4, to);
+        query.setString(1, "%" + city.toLowerCase() + "%");
+        query.setDate(2, from);
+        query.setDate(3, to);
+        query.setDate(4, from);
+        query.setDate(5, to);
         var resultSet = query.executeQuery();
         List<Apartment> apartments = new ArrayList<>();
 
@@ -46,5 +51,9 @@ public class ApartmentService {
         }
 
         return apartments;
+    }
+
+    public List<Apartment> getAvailableApartments(Date from, Date to) throws SQLException {
+        return getAvailableApartments(from, to, "");
     }
 }

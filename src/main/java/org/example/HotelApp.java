@@ -15,9 +15,13 @@ public class HotelApp {
             customerService.showCustomers();
             customerService.showCustomerBalance(1);
 
-            var freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2023-06-14"), Date.valueOf("2023-06-20"));
+            System.out.println("Free apartments in New York");
+            var freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2024-06-14"), Date.valueOf("2024-06-15"), "new york");
             freeApartments.forEach(System.out::println);
 
+            System.out.println("All free apartments");
+            freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2024-06-14"), Date.valueOf("2024-06-15"));
+            freeApartments.forEach(System.out::println);
 
         } catch (SQLException | ConfigurationException e) {
             e.printStackTrace();
