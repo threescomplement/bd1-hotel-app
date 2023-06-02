@@ -88,20 +88,24 @@ public class HotelApp {
         var booking = selectById(bookings, in.nextInt());
 
         System.out.println("New start date (yyyy-mm-dd): ");
-        var from = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+        var from = readDate(in);
         System.out.println("New end date (yyyy-mm-dd): ");
-        var to = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+        var to = readDate(in);
 
         bookingService.changeBookingDate(booking.id(), from, to);
         System.out.println("Updated reservation");
     }
 
+    private static Date readDate(Scanner in) {
+        return Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+    }
+
     private static void handleBookApartment(ApartmentService apartmentService, BookingService bookingService, Scanner in, Customer customer) throws SQLException {
         System.out.println("For what period?");
         System.out.println("From (yyyy-mm-dd): ");
-        var from = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+        var from = readDate(in);
         System.out.println("To (yyyy-mm-dd): ");
-        var to = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+        var to = readDate(in);
         System.out.println("Where (city name): ");
         in.nextLine();  // Do not read newline as new input
         var city = in.nextLine();
