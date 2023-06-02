@@ -1,16 +1,16 @@
--- drop table bookings_services cascade constraints purge;
--- drop table COMPLAINTS cascade constraints purge;
--- drop table PAYMENTS cascade constraints purge;
--- drop table ratings cascade constraints purge;
--- drop table bookings cascade constraints purge;
--- drop table apartments cascade constraints purge;
--- drop table customers cascade constraints purge;
--- drop table hotels cascade constraints purge;
--- drop table addresses cascade constraints purge;
--- drop table cities cascade constraints purge;
--- drop table countries cascade constraints purge;
--- drop table SERVICES cascade constraints purge;
-
+drop table bookings_services cascade constraints purge;
+drop table COMPLAINTS cascade constraints purge;
+drop table PAYMENTS cascade constraints purge;
+drop table ratings cascade constraints purge;
+drop table bookings cascade constraints purge;
+drop table apartments cascade constraints purge;
+drop table customers cascade constraints purge;
+drop table hotels cascade constraints purge;
+drop table addresses cascade constraints purge;
+drop table cities cascade constraints purge;
+drop table countries cascade constraints purge;
+drop table SERVICES cascade constraints purge;
+drop view balance;
 
 CREATE TABLE addresses
 (
@@ -48,7 +48,7 @@ CREATE TABLE bookings
     apartment_id INTEGER NOT NULL
 );
 
-CREATE UNIQUE INDEX booking__idx ON
+CREATE INDEX booking__idx ON
     bookings (
               apartment_id
               ASC);

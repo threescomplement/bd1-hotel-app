@@ -47,6 +47,8 @@ INSERT INTO bookings (id, start_date, end_date, no_people, customer_id, apartmen
 VALUES (2, TO_DATE('2023-07-01', 'YYYY-MM-DD'), TO_DATE('2023-07-05', 'YYYY-MM-DD'), 4, 2, 2);
 INSERT INTO bookings (id, start_date, end_date, no_people, customer_id, apartment_id)
 VALUES (3, TO_DATE('2023-08-01', 'YYYY-MM-DD'), TO_DATE('2023-08-05', 'YYYY-MM-DD'), 1, 1, 3);
+INSERT INTO bookings (id, start_date, end_date, no_people, customer_id, apartment_id)
+VALUES (4, TO_DATE('2023-06-14', 'YYYY-MM-DD'), TO_DATE('2023-06-20', 'YYYY-MM-DD'), 1, 1, 3);
 
 -- Insert data into the services table
 INSERT INTO services (id, name, price)
