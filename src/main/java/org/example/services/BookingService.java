@@ -1,4 +1,6 @@
-package org.example;
+package org.example.services;
+
+import org.example.model.Booking;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -28,7 +30,7 @@ public class BookingService {
         query.executeUpdate();
     }
 
-    public void showBookings(List<Booking> bookings) throws SQLException {
+    public void showBookings(List<Booking> bookings) {
         printSeparator();
         bookings.forEach(b -> System.out.println(
                 b.id() + ". from " + b.start().toString() + " to " + b.end().toString())

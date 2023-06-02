@@ -1,4 +1,7 @@
-package org.example;
+package org.example.services;
+
+import org.example.model.Customer;
+import org.example.model.Product;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,8 +39,7 @@ public class CustomerService {
         return customers;
     }
 
-    void showCustomers() throws SQLException {
-        var customers = getAllCustomers();
+    public void showCustomers(List<Customer> customers) throws SQLException {
         printSeparator();
         System.out.println("id\tname\tsurname\temail");
         customers.forEach(customer -> System.out.println(

@@ -3,6 +3,13 @@ package org.example;
 import oracle.jdbc.pool.OracleDataSource;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.example.model.Entity;
+import org.example.model.Booking;
+import org.example.model.Customer;
+import org.example.services.ApartmentService;
+import org.example.services.BookingService;
+import org.example.services.CustomerService;
+import org.example.services.ProductService;
 
 import java.sql.*;
 import java.util.List;
@@ -21,14 +28,14 @@ public class HotelApp {
             var bookingService = new BookingService(conn);
             var productService = new ProductService(conn);
 
+            Scanner in = new Scanner(System.in);
+
             while (true) {
                 var customers = customerService.getAllCustomers();
-                customerService.showCustomers();
+                customerService.showCustomers(customers);
                 System.out.println("Select customer");
-                Scanner in = new Scanner(System.in);
                 var customer = selectById(customers, in.nextInt());
 
-                System.out.println(customer);
                 var quitCustomerMenu = false;
                 while (!quitCustomerMenu) {
                     System.out.println("What do you want to do?");

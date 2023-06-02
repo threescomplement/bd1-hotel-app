@@ -1,4 +1,6 @@
-package org.example;
+package org.example.services;
+
+import org.example.model.Apartment;
 
 import java.sql.Connection;
 import java.sql.Date;
