@@ -21,35 +21,37 @@ public class HotelApp {
             var bookingService = new BookingService(conn);
             var productService = new ProductService(conn);
 
-            var customers = customerService.getAllCustomers();
-            customerService.showCustomers();
-            System.out.println("Select customer");
-            Scanner in = new Scanner(System.in);
-            var customer = selectById(customers, in.nextInt());
+            while (true) {
+                var customers = customerService.getAllCustomers();
+                customerService.showCustomers();
+                System.out.println("Select customer");
+                Scanner in = new Scanner(System.in);
+                var customer = selectById(customers, in.nextInt());
 
-            System.out.println(customer);
-            var quit = false;
-            while (!quit) {
-                System.out.println("What do you want to do?");
-                System.out.println("1. Show customer's active bookings");
-                System.out.println("2. Book room");
-                System.out.println("3. Change booking date");
-                System.out.println("4. Cancel booking");
-                System.out.println("5. Order extra service");
-                System.out.println("6. Show customer's balance");
-                System.out.println("7. Exit");
+                System.out.println(customer);
+                var quitCustomerMenu = false;
+                while (!quitCustomerMenu) {
+                    System.out.println("What do you want to do?");
+                    System.out.println("1. Show customer's active bookings");
+                    System.out.println("2. Book room");
+                    System.out.println("3. Change booking date");
+                    System.out.println("4. Cancel booking");
+                    System.out.println("5. Order extra service");
+                    System.out.println("6. Show customer's balance");
+                    System.out.println("7. Exit");
 
-                var option = in.nextInt();
+                    var option = in.nextInt();
 
-                switch (option) {
-                    case 1 -> handleShowBookings(bookingService, customer);
-                    case 2 -> handleBookApartment(apartmentService, bookingService, in, customer);
-                    case 3 -> handleChangeDate(bookingService, in, customer);
-                    case 4 -> handleCancelBooking(bookingService, in, customer);
-                    case 5 -> handleOrderService(bookingService, productService, in, customer);
-                    case 6 -> handleShowBalance(customer, customerService);
-                    case 7 -> quit = true;
-                    default -> System.out.println("Invalid choice");
+                    switch (option) {
+                        case 1 -> handleShowBookings(bookingService, customer);
+                        case 2 -> handleBookApartment(apartmentService, bookingService, in, customer);
+                        case 3 -> handleChangeDate(bookingService, in, customer);
+                        case 4 -> handleCancelBooking(bookingService, in, customer);
+                        case 5 -> handleOrderService(bookingService, productService, in, customer);
+                        case 6 -> handleShowBalance(customer, customerService);
+                        case 7 -> quitCustomerMenu = true;
+                        default -> System.out.println("Invalid choice");
+                    }
                 }
             }
 
