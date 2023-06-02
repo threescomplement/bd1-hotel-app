@@ -58,13 +58,13 @@ ALTER TABLE bookings
 
 CREATE TABLE bookings_services
 (
+    id          INTEGER GENERATED ALWAYS AS IDENTITY,
     services_id INTEGER NOT NULL,
     booking_id  INTEGER NOT NULL
 );
 
 ALTER TABLE bookings_services
-    ADD CONSTRAINT booking_services_pk PRIMARY KEY (services_id,
-                                                    booking_id);
+    ADD CONSTRAINT booking_services_pk PRIMARY KEY (id);
 
 CREATE TABLE cities
 (
