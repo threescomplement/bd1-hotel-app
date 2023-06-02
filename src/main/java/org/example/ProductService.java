@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.Common.printSeparator;
+
 public class ProductService {
     public static final String ALL_PRODUCTS_QUERY = "SELECT * FROM SERVICES";
     public static final String ORDER_PRODUCT_QUERY = "INSERT INTO BOOKINGS_SERVICES (SERVICES_ID, BOOKING_ID) VALUES (?, ?)";
@@ -33,5 +35,11 @@ public class ProductService {
         query.setInt(1, productId);
         query.setInt(2, bookingId);
         query.executeUpdate();
+    }
+
+    public void showProducts(List<Product> products) {
+        printSeparator();
+        products.forEach(p -> System.out.println(p.id() + ". " + p.name() + " $" + p.price()));
+        printSeparator();
     }
 }

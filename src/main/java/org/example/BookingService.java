@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.Common.printSeparator;
+
 public class BookingService {
     public static final String INSERT_BOOKING_QUERY = "INSERT INTO BOOKINGS (START_DATE, END_DATE, NO_PEOPLE, CUSTOMER_ID, APARTMENT_ID) VALUES (?, ?, ?, ?, ?)";
     public static final String CUSTOMER_BOOKINGS_QUERY = "SELECT * FROM BOOKINGS WHERE CUSTOMER_ID = ?";
@@ -16,7 +18,7 @@ public class BookingService {
         this.connection = connection;
     }
 
-    public void bookRoom(Booking booking) throws SQLException {
+    public void makeReservation(Booking booking) throws SQLException {
         var query = connection.prepareStatement(INSERT_BOOKING_QUERY);
         query.setDate(1, booking.start());
         query.setDate(2, booking.end());
@@ -24,6 +26,14 @@ public class BookingService {
         query.setInt(4, booking.customerId());
         query.setInt(5, booking.apartmentId());
         query.executeUpdate();
+    }
+
+    public void showBookings(List<Booking> bookings) throws SQLException {
+        printSeparator();
+        bookings.forEach(b -> System.out.println(
+                b.id() + ". from " + b.start().toString() + " to " + b.end().toString())
+        );
+        printSeparator();
     }
 
     public List<Booking> getCustomerBookings(int customerId) throws SQLException {

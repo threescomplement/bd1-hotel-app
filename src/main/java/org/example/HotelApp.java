@@ -5,10 +5,15 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.sql.*;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
-import static org.example.Common.printSeparator;
 
 public class HotelApp {
+
+    public static final String DATE_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
+
     public static void main(String[] args) {
         try (var conn = getDbConnection()) {
             var customerService = new CustomerService(conn);
@@ -16,36 +21,96 @@ public class HotelApp {
             var bookingService = new BookingService(conn);
             var productService = new ProductService(conn);
 
+            var customers = customerService.getAllCustomers();
             customerService.showCustomers();
-            customerService.showCustomerBalance(1);
+            System.out.println("Select customer");
+            Scanner in = new Scanner(System.in);
+            var customer = customers.stream()
+                    .filter(c -> c.id() == in.nextInt())
+                    .findFirst()
+                    .orElseThrow();
 
-            System.out.println("Free apartments in New York");
-            var freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2024-06-14"), Date.valueOf("2024-06-15"), "new york");
-            freeApartments.forEach(System.out::println);
+            System.out.println(customer);
 
-            System.out.println("All free apartments");
-            freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2024-06-14"), Date.valueOf("2024-06-15"));
-            freeApartments.forEach(System.out::println);
+            while (true) {
+                System.out.println("What do you want to do?");
+                System.out.println("1. Show customer's active bookings");
+                System.out.println("2. Book room");
+                System.out.println("3. Change booking date");
+                System.out.println("4. Cancel booking");
+                System.out.println("5. Order extra service");
 
+                var option = in.nextInt();
 
-            printSeparator();
-            System.out.println("Bookings for customer 2");
-            bookingService.bookRoom(new Booking(Date.valueOf("2024-06-10"), Date.valueOf("2024-06-30"), 1, 2, 1));
-            var bookings = bookingService.getCustomerBookings(2);
-            bookings.forEach(System.out::println);
+                switch (option) {
+                    case 1 -> bookingService.showBookings(bookingService.getCustomerBookings(customer.id()));
+                    case 2 -> {
+                        System.out.println("For what period?");
+                        System.out.println("From (yyyy-mm-dd): ");
+                        var from = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+                        System.out.println("To (yyyy-mm-dd): ");
+                        var to = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+                        System.out.println("Where (city name): ");
+                        var city = new Scanner(System.in).nextLine();
 
-            bookingService.cancelBooking(bookings.get(0).id());
-            System.out.println("After delete");
-            bookingService.getCustomerBookings(2).forEach(System.out::println);
+                        System.out.println("Apartments available:");
+                        var apartments = apartmentService.getAvailableApartments(from, to, city);
+                        apartmentService.showApartments(apartments);
 
+                        System.out.println("Which would you like to choose?");
+                        var apartment = apartments.stream()
+                                .filter(apt -> apt.id() == new Scanner(System.in).nextInt())
+                                .findFirst()
+                                .orElseThrow();
 
-            bookings = bookingService.getCustomerBookings(1);
-            productService.orderProduct(1, bookings.get(0).id());
+                        var booking = new Booking(from, to, 1, customer.id(), apartment.id());
+                        bookingService.makeReservation(booking);
+                        System.out.println("Reservation complete.");
+                    }
+                    case 3 -> {
+                        System.out.println("For which reservation?");
+                        var bookings = bookingService.getCustomerBookings(customer.id());
+                        bookingService.showBookings(bookings);
+                        var booking = selectById(bookings);
 
-            printSeparator();
-            System.out.println("All products");
-            productService.getAllProducts().forEach(System.out::println);
+                        System.out.println("New start date (yyyy-mm-dd): ");
+                        var from = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+                        System.out.println("New end date (yyyy-mm-dd): ");
+                        var to = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
 
+                        bookingService.changeBookingDate(booking.id(), from, to);
+                        System.out.println("Updated reservation");
+                    }
+                    case 4 -> {
+                        var bookings = bookingService.getCustomerBookings(customer.id());
+                        System.out.println("Which reservation would you like to cancel?");
+                        bookingService.showBookings(bookings);
+                        var booking = selectById(bookings);
+
+                        bookingService.cancelBooking(booking.id());
+                        System.out.println("Cancelled successfully");
+                    }
+                    case 5 -> {
+                        var bookings = bookingService.getCustomerBookings(customer.id());
+                        System.out.println("Choose your reservation");
+                        bookingService.showBookings(bookings);
+                        var booking = selectById(bookings);
+
+                        var services = productService.getAllProducts();
+                        System.out.println("Which extra service would you like to order?");
+                        productService.showProducts(services);
+                        var service = services.stream()
+                                .filter(s -> s.id() == new Scanner(System.in).nextInt())
+                                .findFirst()
+                                .orElseThrow();
+
+                        productService.orderProduct(service.id(), booking.id());
+                        System.out.println("Ordered successfully");
+
+                    }
+                    default -> System.out.println("Invalid choice");
+                }
+            }
 
         } catch (SQLException | ConfigurationException e) {
             e.printStackTrace();
@@ -78,4 +143,10 @@ public class HotelApp {
         return connection;
     }
 
+    private static Booking selectById(List<Booking> bookings) {
+        return bookings.stream()
+                .filter(b -> b.id() == new Scanner(System.in).nextInt())
+                .findFirst()
+                .orElseThrow();
+    }
 }

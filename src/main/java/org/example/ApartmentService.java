@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.Common.printSeparator;
+
 public class ApartmentService {
     private static final String FREE_APARTMENTS_QUERY = """
             SELECT *
@@ -51,6 +53,14 @@ public class ApartmentService {
         }
 
         return apartments;
+    }
+
+    public void showApartments(List<Apartment> apartments) {
+        printSeparator();
+        apartments.forEach(apt -> System.out.println(
+                apt.id() + ". with " + apt.nRooms() + " rooms, $" + apt.pricePerDay() + " per day"
+        ));
+        printSeparator();
     }
 
     public List<Apartment> getAvailableApartments(Date from, Date to) throws SQLException {
