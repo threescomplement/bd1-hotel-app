@@ -165,51 +165,51 @@ ALTER TABLE services
 
 ALTER TABLE addresses
     ADD CONSTRAINT address_city_fk FOREIGN KEY (city_id)
-        REFERENCES cities (id);
+        REFERENCES cities (id) ON DELETE CASCADE;
 
 ALTER TABLE apartments
     ADD CONSTRAINT apartment_hotel_fk FOREIGN KEY (hotel_id)
-        REFERENCES hotels (id);
+        REFERENCES hotels (id) ON DELETE CASCADE;
 
 ALTER TABLE bookings
     ADD CONSTRAINT booking_apartment_fk FOREIGN KEY (apartment_id)
-        REFERENCES apartments (id);
+        REFERENCES apartments (id) ON DELETE CASCADE;
 
 ALTER TABLE bookings
     ADD CONSTRAINT booking_customer_fk FOREIGN KEY (customer_id)
-        REFERENCES customers (id);
+        REFERENCES customers (id) ON DELETE CASCADE;
 
 ALTER TABLE bookings_services
     ADD CONSTRAINT booking_services_booking_fk FOREIGN KEY (booking_id)
-        REFERENCES bookings (id);
+        REFERENCES bookings (id) ON DELETE CASCADE;
 
 ALTER TABLE bookings_services
     ADD CONSTRAINT booking_services_services_fk FOREIGN KEY (services_id)
-        REFERENCES services (id);
+        REFERENCES services (id) ON DELETE CASCADE;
 
 ALTER TABLE cities
     ADD CONSTRAINT city_country_fk FOREIGN KEY (country_id)
-        REFERENCES countries (id);
+        REFERENCES countries (id) ON DELETE CASCADE;
 
 ALTER TABLE customers
     ADD CONSTRAINT customer_address_fk FOREIGN KEY (address_id)
-        REFERENCES addresses (id);
+        REFERENCES addresses (id) ON DELETE CASCADE;
 
 ALTER TABLE complaints
     ADD CONSTRAINT complaints_booking_fk FOREIGN KEY (booking_id)
-        REFERENCES bookings (id);
+        REFERENCES bookings (id) ON DELETE CASCADE;
 
 ALTER TABLE hotels
     ADD CONSTRAINT hotel_address_fk FOREIGN KEY (address_id)
-        REFERENCES addresses (id);
+        REFERENCES addresses (id) ON DELETE CASCADE;
 
 ALTER TABLE payments
     ADD CONSTRAINT payments_booking_fk FOREIGN KEY (booking_id)
-        REFERENCES bookings (id);
+        REFERENCES bookings (id) ON DELETE CASCADE;
 
 ALTER TABLE ratings
     ADD CONSTRAINT rating_booking_fk FOREIGN KEY (booking_id)
-        REFERENCES bookings (id);
+        REFERENCES bookings (id) ON DELETE CASCADE;
 
 
 CREATE VIEW balance AS
