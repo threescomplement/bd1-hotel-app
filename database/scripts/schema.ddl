@@ -14,7 +14,7 @@ drop view balance;
 
 CREATE TABLE addresses
 (
-    id       INTEGER NOT NULL,
+    id       INTEGER GENERATED ALWAYS AS IDENTITY,
     street   VARCHAR2(64),
     zip_code VARCHAR2(64),
     city_id  INTEGER NOT NULL
@@ -25,7 +25,7 @@ ALTER TABLE addresses
 
 CREATE TABLE apartments
 (
-    id            INTEGER NOT NULL,
+    id            INTEGER GENERATED ALWAYS AS IDENTITY,
     no_rooms      INTEGER,
     no_bathrooms  INTEGER,
     no_beds       INTEGER,
@@ -40,7 +40,7 @@ ALTER TABLE apartments
 
 CREATE TABLE bookings
 (
-    id           INTEGER NOT NULL,
+    id           INTEGER GENERATED ALWAYS AS IDENTITY,
     start_date   DATE,
     end_date     DATE,
     no_people    INTEGER,
@@ -68,7 +68,7 @@ ALTER TABLE bookings_services
 
 CREATE TABLE cities
 (
-    id         INTEGER NOT NULL,
+    id         INTEGER GENERATED ALWAYS AS IDENTITY,
     name       VARCHAR2(64),
     country_id INTEGER NOT NULL
 );
@@ -78,7 +78,7 @@ ALTER TABLE cities
 
 CREATE TABLE customers
 (
-    id           INTEGER NOT NULL,
+    id           INTEGER GENERATED ALWAYS AS IDENTITY,
     name         VARCHAR2(64),
     surname      VARCHAR2(64),
     age          INTEGER,
@@ -98,7 +98,7 @@ ALTER TABLE customers
 
 CREATE TABLE complaints
 (
-    id         INTEGER NOT NULL,
+    id         INTEGER GENERATED ALWAYS AS IDENTITY,
     "date"     DATE,
     text       VARCHAR2(512),
     booking_id INTEGER NOT NULL
@@ -109,7 +109,7 @@ ALTER TABLE complaints
 
 CREATE TABLE countries
 (
-    id   INTEGER NOT NULL,
+    id   INTEGER GENERATED ALWAYS AS IDENTITY,
     name VARCHAR2(64)
 );
 
@@ -118,7 +118,7 @@ ALTER TABLE countries
 
 CREATE TABLE hotels
 (
-    id           INTEGER NOT NULL,
+    id           INTEGER GENERATED ALWAYS AS IDENTITY,
     phone_number VARCHAR2(64),
     email        VARCHAR2(64),
     stars        INTEGER,
@@ -143,7 +143,7 @@ CREATE TABLE payments
 
 CREATE TABLE ratings
 (
-    id          INTEGER NOT NULL,
+    id          INTEGER GENERATED ALWAYS AS IDENTITY,
     "date"      DATE,
     star_rating INTEGER,
     text        VARCHAR2(512),
@@ -155,7 +155,7 @@ ALTER TABLE ratings
 
 CREATE TABLE services
 (
-    id    INTEGER NOT NULL,
+    id    INTEGER GENERATED ALWAYS AS IDENTITY,
     name  VARCHAR2(64),
     price NUMBER(10, 2)
 );
