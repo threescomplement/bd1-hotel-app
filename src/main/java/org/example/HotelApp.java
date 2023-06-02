@@ -25,10 +25,7 @@ public class HotelApp {
             customerService.showCustomers();
             System.out.println("Select customer");
             Scanner in = new Scanner(System.in);
-            var customer = customers.stream()
-                    .filter(c -> c.id() == in.nextInt())
-                    .findFirst()
-                    .orElseThrow();
+            var customer = selectById(customers, in.nextInt());
 
             System.out.println(customer);
 
@@ -51,17 +48,14 @@ public class HotelApp {
                         System.out.println("To (yyyy-mm-dd): ");
                         var to = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
                         System.out.println("Where (city name): ");
-                        var city = new Scanner(System.in).nextLine();
+                        var city = in.nextLine();
 
                         System.out.println("Apartments available:");
                         var apartments = apartmentService.getAvailableApartments(from, to, city);
                         apartmentService.showApartments(apartments);
 
                         System.out.println("Which would you like to choose?");
-                        var apartment = apartments.stream()
-                                .filter(apt -> apt.id() == new Scanner(System.in).nextInt())
-                                .findFirst()
-                                .orElseThrow();
+                        var apartment = selectById(apartments, in.nextInt());
 
                         var booking = new Booking(from, to, 1, customer.id(), apartment.id());
                         bookingService.makeReservation(booking);
@@ -71,7 +65,7 @@ public class HotelApp {
                         System.out.println("For which reservation?");
                         var bookings = bookingService.getCustomerBookings(customer.id());
                         bookingService.showBookings(bookings);
-                        var booking = selectById(bookings);
+                        var booking = selectById(bookings, in.nextInt());
 
                         System.out.println("New start date (yyyy-mm-dd): ");
                         var from = Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
@@ -85,7 +79,7 @@ public class HotelApp {
                         var bookings = bookingService.getCustomerBookings(customer.id());
                         System.out.println("Which reservation would you like to cancel?");
                         bookingService.showBookings(bookings);
-                        var booking = selectById(bookings);
+                        var booking = selectById(bookings, in.nextInt());
 
                         bookingService.cancelBooking(booking.id());
                         System.out.println("Cancelled successfully");
@@ -94,15 +88,12 @@ public class HotelApp {
                         var bookings = bookingService.getCustomerBookings(customer.id());
                         System.out.println("Choose your reservation");
                         bookingService.showBookings(bookings);
-                        var booking = selectById(bookings);
+                        var booking = selectById(bookings, in.nextInt());
 
                         var services = productService.getAllProducts();
                         System.out.println("Which extra service would you like to order?");
                         productService.showProducts(services);
-                        var service = services.stream()
-                                .filter(s -> s.id() == new Scanner(System.in).nextInt())
-                                .findFirst()
-                                .orElseThrow();
+                        var service = selectById(services, in.nextInt());
 
                         productService.orderProduct(service.id(), booking.id());
                         System.out.println("Ordered successfully");
@@ -143,9 +134,9 @@ public class HotelApp {
         return connection;
     }
 
-    private static Booking selectById(List<Booking> bookings) {
-        return bookings.stream()
-                .filter(b -> b.id() == new Scanner(System.in).nextInt())
+    private static <T extends Entity> T selectById(List<T> entities, int id) {
+        return entities.stream()
+                .filter(e -> e.id() == id)
                 .findFirst()
                 .orElseThrow();
     }
