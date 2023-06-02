@@ -36,7 +36,8 @@ public class HotelApp {
                 System.out.println("3. Change booking date");
                 System.out.println("4. Cancel booking");
                 System.out.println("5. Order extra service");
-                System.out.println("6. Exit");
+                System.out.println("6. Show customer's balance");
+                System.out.println("7. Exit");
 
                 var option = in.nextInt();
 
@@ -46,7 +47,8 @@ public class HotelApp {
                     case 3 -> handleChangeDate(bookingService, in, customer);
                     case 4 -> handleCancelBooking(bookingService, in, customer);
                     case 5 -> handleOrderService(bookingService, productService, in, customer);
-                    case 6 -> quit = true;
+                    case 6 -> handleShowBalance(customer, customerService);
+                    case 7 -> quit = true;
                     default -> System.out.println("Invalid choice");
                 }
             }
@@ -54,6 +56,10 @@ public class HotelApp {
         } catch (SQLException | ConfigurationException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void handleShowBalance(Customer customer, CustomerService customerService) throws SQLException {
+        customerService.showCustomerBalance(customer.id());
     }
 
     private static void handleOrderService(BookingService bookingService, ProductService productService, Scanner in, Customer customer) throws SQLException {
@@ -96,10 +102,6 @@ public class HotelApp {
         System.out.println("Updated reservation");
     }
 
-    private static Date readDate(Scanner in) {
-        return Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
-    }
-
     private static void handleBookApartment(ApartmentService apartmentService, BookingService bookingService, Scanner in, Customer customer) throws SQLException {
         System.out.println("For what period?");
         System.out.println("From (yyyy-mm-dd): ");
@@ -127,6 +129,17 @@ public class HotelApp {
         bookingService.showBookings(bookings);
     }
 
+    private static Date readDate(Scanner in) {
+        return Date.valueOf(in.next(Pattern.compile(DATE_PATTERN)));
+    }
+
+    private static <T extends Entity> T selectById(List<T> entities, int id) {
+        return entities.stream()
+                .filter(e -> e.id() == id)
+                .findFirst()
+                .orElseThrow();
+    }
+
     private static PropertiesConfiguration getDbProperties() throws ConfigurationException {
         return new PropertiesConfiguration("db.properties");
     }
@@ -151,12 +164,5 @@ public class HotelApp {
         System.out.println(meta.getDatabaseProductVersion());
 
         return connection;
-    }
-
-    private static <T extends Entity> T selectById(List<T> entities, int id) {
-        return entities.stream()
-                .filter(e -> e.id() == id)
-                .findFirst()
-                .orElseThrow();
     }
 }
