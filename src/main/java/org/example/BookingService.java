@@ -52,4 +52,10 @@ public class BookingService {
         query.setInt(3, bookingId);
         query.executeUpdate();
     }
+
+    public void cancelBooking(int bookingId) throws SQLException {
+        var query = connection.prepareStatement("DELETE FROM BOOKINGS WHERE ID = ?");
+        query.setInt(1, bookingId);
+        query.executeUpdate();
+    }
 }

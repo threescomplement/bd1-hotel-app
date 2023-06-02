@@ -27,13 +27,20 @@ public class HotelApp {
             freeApartments = apartmentService.getAvailableApartments(Date.valueOf("2024-06-14"), Date.valueOf("2024-06-15"));
             freeApartments.forEach(System.out::println);
 
-            bookingService.bookRoom(new Booking(Date.valueOf("2024-06-10"), Date.valueOf("2024-06-30"), 1, 1, 1));
 
             printSeparator();
-            System.out.println("Bookings for customer 1");
-            bookingService.getCustomerBookings(1).forEach(System.out::println);
+            System.out.println("Bookings for customer 2");
+            bookingService.bookRoom(new Booking(Date.valueOf("2024-06-10"), Date.valueOf("2024-06-30"), 1, 2, 1));
+            var bookings = bookingService.getCustomerBookings(2);
+            bookings.forEach(System.out::println);
 
-            productService.orderProduct(1, 1);
+            bookingService.cancelBooking(bookings.get(0).id());
+            System.out.println("After delete");
+            bookingService.getCustomerBookings(2).forEach(System.out::println);
+
+
+            bookings = bookingService.getCustomerBookings(1);
+            productService.orderProduct(1, bookings.get(0).id());
 
             printSeparator();
             System.out.println("All products");
