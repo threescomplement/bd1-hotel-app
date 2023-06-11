@@ -14,12 +14,32 @@ where BOOKING_ID = 1
 
 
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('first:');
-    change_booking_period(1, TO_DATE('2021-09-01'), TO_DATE('2021-09-05'));
-    DBMS_OUTPUT.PUT_LINE('second:');
+    DBMS_OUTPUT.PUT_LINE('first:'); -- overlaps with booking 31
+    change_booking_period(1, TO_DATE('2023-09-01'), TO_DATE('2023-09-05'));
+    DBMS_OUTPUT.PUT_LINE('second:'); -- starts after it finishes
     change_booking_period(2, TO_DATE('2023-09-02'), TO_DATE('2023-09-01'));
-    DBMS_OUTPUT.PUT_LINE('third:');
+    DBMS_OUTPUT.PUT_LINE('third:'); --unknown booking
     change_booking_period(100000, TO_DATE('2023-09-01'), TO_DATE('2023-09-01'));
-    DBMS_OUTPUT.PUT_LINE('fourth:'); -- this is checked by a trigger
+    DBMS_OUTPUT.PUT_LINE('fourth:'); -- doesnt change anything
     change_booking_period(31, TO_DATE('2023-08-20'), TO_DATE('2023-09-02'));
+end;/
+commit;
+
+
+
+UPDATE BOOKINGS
+SET START_DATE = TO_DATE('2023-05-30', 'YYYY-MM-DD')
+WHERE ID = 1;
+
+
+
+Begin
+    DBMS_OUTPUT.PUT_LINE('first:');
+    UPDATE_CUSTOMER_CONTACT_INFO(1, 'mluszcz@gmail.com', '+48 213423456');
+    DBMS_OUTPUT.PUT_LINE('second:');
+    UPDATE_CUSTOMER_CONTACT_INFO(2, 'XXXXXXXXXXXXXXXXX', '+48 13');
+    DBMS_OUTPUT.PUT_LINE('third:');
+    UPDATE_CUSTOMER_CONTACT_INFO(100000, 'XXXXXXXXXXXXXXXXX', '+48 13');
+    DBMS_OUTPUT.PUT_LINE('fourth:');
+    UPDATE_CUSTOMER_CONTACT_INFO(2, 'XXXXXXXXXXXXXXXXX', '+48 139999999999999999999');
 end;
