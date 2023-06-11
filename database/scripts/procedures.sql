@@ -2,8 +2,6 @@
 -- update_customer_contact_info(id, email, number) - sprawdza czy number jest poprawnej długości
 -- add_service_to_booking(service_id, booking_id) - dodaje nowy wiersz w booking-services i sprawdza czy taki booking i servis istnieją
 
--- this procedure is used to update the dates of a booking, but only if that booking exists and also if
--- the apartment is available between the dates (identified by apartment_id)
 create or replace procedure change_booking_period(booking_id BOOKINGS.ID%type, start_date Date, end_date DATE)
 AS
     v_given_booking BOOKINGS%rowtype;
@@ -62,13 +60,13 @@ Begin
         PHONE_NUMBER = p_number
     where ID = customer_id;
 EXCEPtion
-when others then
-    DBMS_OUTPUT.PUT_LINE('Failed to update customer!');
+    when others then
+        DBMS_OUTPUT.PUT_LINE('Failed to update customer!');
 end;/
 
 
 
-create or replace procedure add_service_to_booking(service_id SERVICES.ID%type, booking_id BOOKINGS.ID%type)
+create or replace procedure add_service_to_booking(service_id SERVICES.ID%type, book_id BOOKINGS.ID%type)
 AS
     v_given_service SERVICES%rowtype;
     v_given_booking BOOKINGS%rowtype;
@@ -77,7 +75,7 @@ AS
                        where ID = service_id);
     cursor booking is (Select *
                        from BOOKINGS
-                       where ID = booking_id);
+                       where ID = book_id);
 begin
     open service;
     fetch service into v_given_service;
@@ -95,7 +93,14 @@ begin
         return;
     end if;
     close booking;
-    INSERT into BOOKINGS_SERVICES VALUES (DEFAULT, service_id, booking_id);
+    for book_serv in (Select BOOKING_ID, SERVICES_ID from BOOKINGS_SERVICES)
+        loop
+            if book_serv.BOOKING_ID = book_id and book_serv.SERVICES_ID = service_id then
+                DBMS_OUTPUT.PUT_LINE('Service already added!');
+                return;
+            end if;
+        end loop;
+    INSERT into BOOKINGS_SERVICES VALUES (Default, service_id, book_id);
 EXCEPTION
     when others then
         DBMS_OUTPUT.PUT_LINE('Failed to add service!');
