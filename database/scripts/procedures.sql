@@ -2,14 +2,19 @@
 -- update_customer_contact_info(id, email, number) - sprawdza czy number jest poprawnej długości
 -- add_service_to_booking(service_id, booking_id) - dodaje nowy wiersz w booking-services i sprawdza czy taki booking i servis istnieją
 
-create or replace procedure change_booking_period(booking_id BOOKINGS.ID%type, start_date Date, end_date DATE)
+create or replace procedure change_booking_period(booking_id BOOKINGS.ID%type, n_start_date Date, n_end_date DATE)
 AS
     v_given_booking BOOKINGS%rowtype;
+    v_overlaping    BOOKINGS%rowtype;
     cursor booking is (Select *
                        from BOOKINGS
                        where ID = booking_id);
+    cursor overlaping is (Select *
+                          from BOOKINGS
+                          where START_DATE between n_start_date and n_end_date
+                             or END_DATE between n_start_date and n_end_date);
 Begin
-    if (end_date < start_date) then
+    if (n_end_date < n_start_date) then
         raise INVALID_NUMBER;
     End if;
     open booking;
@@ -20,10 +25,19 @@ Begin
         return;
     end if;
     close booking;
-
+    open overlaping;
+    loop
+        exit when overlaping%notfound;
+        fetch overlaping into v_overlaping;
+        if v_overlaping.ID != booking_id and v_overlaping.APARTMENT_ID = v_given_booking.APARTMENT_ID then
+            DBMS_OUTPUT.PUT_LINE('Dates overlap with other booking!');
+            return;
+        end if;
+    end loop;
+    close overlaping;
     UPDATE BOOKINGS
-    set START_DATE = start_date,
-        END_DATE   = end_date
+    set START_DATE = n_start_date,
+        END_DATE   = n_end_date
     where ID = booking_id;
 
 
@@ -50,7 +64,7 @@ Begin
         return;
     end if;
     close customer;
-    if p_number < 9 or p_number > 14 then
+    if length(p_number) < 9 or length(p_number) > 14 then
         DBMS_OUTPUT.PUT_LINE('Invalid number!');
         return;
     end if;
