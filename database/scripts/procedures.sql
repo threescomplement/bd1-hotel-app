@@ -18,8 +18,10 @@ Begin
     fetch booking into v_given_booking;
     if booking%notfound then
         DBMS_OUTPUT.PUT_LINE('Booking not found!');
+        close booking;
         return;
     end if;
+    close booking;
 
     UPDATE BOOKINGS
     set START_DATE = start_date,
@@ -42,11 +44,14 @@ AS
                         from CUSTOMERS
                         where ID = customer_id);
 Begin
+    open customer;
     fetch customer into v_given_customer;
     if customer%notfound then
         DBMS_OUTPUT.PUT_LINE('Customer not found!');
+        close customer;
         return;
     end if;
+    close customer;
     if p_number < 9 or p_number > 14 then
         DBMS_OUTPUT.PUT_LINE('Invalid number!');
         return;
@@ -74,16 +79,22 @@ AS
                        from BOOKINGS
                        where ID = booking_id);
 begin
+    open service;
     fetch service into v_given_service;
     if service%notfound then
         DBMS_OUTPUT.PUT_LINE('Service not found!');
+        close service;
         return;
     end if;
+    close service;
+    open booking;
     fetch booking into v_given_booking;
     if booking%notfound then
         DBMS_OUTPUT.PUT_LINE('Booking not found!');
+        close booking;
         return;
     end if;
+    close booking;
     INSERT into BOOKINGS_SERVICES VALUES (DEFAULT, service_id, booking_id);
 EXCEPTION
     when others then
