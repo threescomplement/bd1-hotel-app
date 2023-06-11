@@ -135,7 +135,7 @@ ALTER TABLE hotels
 
 CREATE TABLE payments
 (
-    id         INTEGER,
+    id         INTEGER GENERATED ALWAYS AS IDENTITY,
     timestamp  DATE,
     amount     NUMBER(10, 2),
     booking_id INTEGER NOT NULL
