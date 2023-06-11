@@ -21,6 +21,10 @@ application {
     mainClass = 'org.example.HotelApp'
 }
 
+run {
+    standardInput = System.in
+}
+
 test {
     useJUnitPlatform()
 }
