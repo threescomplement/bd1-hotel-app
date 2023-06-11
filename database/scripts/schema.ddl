@@ -147,7 +147,7 @@ CREATE TABLE ratings
     "date"      DATE,
     star_rating INTEGER,
     text        VARCHAR2(512),
-    booking_id  INTEGER NOT NULL
+    booking_id  INTEGER NOT NULL UNIQUE
 );
 
 ALTER TABLE ratings
