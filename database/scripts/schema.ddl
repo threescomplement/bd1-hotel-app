@@ -32,7 +32,7 @@ CREATE TABLE apartments
     max_no_people INTEGER,
     area          INTEGER,
     price_per_day NUMBER(10, 2),
-    hotel_id      INTEGER
+    hotel_id      INTEGER NOT NULL
 );
 
 ALTER TABLE apartments
@@ -147,11 +147,13 @@ CREATE TABLE ratings
     "date"      DATE,
     star_rating INTEGER,
     text        VARCHAR2(512),
-    booking_id  INTEGER NOT NULL
+    booking_id  INTEGER NOT NULL UNIQUE
 );
 
 ALTER TABLE ratings
     ADD CONSTRAINT rating_pk PRIMARY KEY (id);
+ALTER TABLE ratings
+    ADD CONSTRAINT booking_id_unique UNIQUE (booking_id);
 
 CREATE TABLE services
 (
