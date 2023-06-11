@@ -36,7 +36,7 @@ Exception
 end;/
 
 
-create or replace procedure update_customer_contact_info(customer_id CUSTOMERS.ID%type, email CUSTOMERS.EMAIL%type,
+create or replace procedure update_customer_contact_info(customer_id CUSTOMERS.ID%type, n_email CUSTOMERS.EMAIL%type,
                                                          p_number CUSTOMERS.PHONE_NUMBER%type)
 AS
     v_given_customer CUSTOMERS%rowtype;
@@ -58,7 +58,7 @@ Begin
     end if;
 
     UPDATE CUSTOMERS
-    set EMAIL        = email,
+    set EMAIL        = n_email,
         PHONE_NUMBER = p_number
     where ID = customer_id;
 EXCEPtion
