@@ -10,7 +10,7 @@ FROM apartments a
 
 
 /*
-Zapytanie wyświetlające nazwy miast, w których znajdują się apartamenty z co najmniej 3 sypialniami:
+Zapytanie wyświetlające nazwy miast, w których znajdują się apartamenty z co najmniej 3 łóżkami:
 */
 SELECT ci.name AS city
 FROM apartments a
