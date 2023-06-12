@@ -8,6 +8,13 @@ Projekt na przedmiot Bazy Danych 1 (2023, semestr letni)
   * [Założenie schematu](./database/scripts/schema.ddl)
   * [Ładowanie danych](./database/scripts/add-data.sql)
   * [Testowe zapytania](./database/scripts/db_examples.sql)
+  * [Definicje funkcji](./database/scripts/payments.sql)
+  * [Definicje procedur](./database/scripts/procedures.sql)
+  * [Definicje wyzwalaczy](./database/scripts/triggers.sql)
+  * [Przykłady wykorzystania funkcji](./database/scripts/payments_examples.sql)
+  * [Przykłady wykorzystania procedur](./database/scripts/procedures_examples.sql)
+  * [Przykłady wykorzystania wyzwalaczy](./database/scripts/triggers_examples.sql)
+* [Kod źródłowy aplikacji w Javie](./src/main/java)
 
 ## Uruchomienie aplikacji
 Aplikacja wykorzystuje Gradle do budowania, aby uruchomić należy wykonać
